@@ -552,7 +552,7 @@ class TestDocumentSearchApi(DirectoriesMixin, APITestCase):
 
         response = self.client.get("/api/search/autocomplete/?term=app")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [b"apples", b"applebaum", b"appletini"])
+        self.assertEqual(response.data, [b"appl", b"applebaum", b"appletini"])
 
         d3.owner = u2
 
@@ -561,7 +561,7 @@ class TestDocumentSearchApi(DirectoriesMixin, APITestCase):
 
         response = self.client.get("/api/search/autocomplete/?term=app")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [b"apples", b"applebaum"])
+        self.assertEqual(response.data, [b"appl", b"applebaum"])
 
         assign_perm("view_document", u1, d3)
 
@@ -570,7 +570,7 @@ class TestDocumentSearchApi(DirectoriesMixin, APITestCase):
 
         response = self.client.get("/api/search/autocomplete/?term=app")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [b"apples", b"applebaum", b"appletini"])
+        self.assertEqual(response.data, [b"appl", b"applebaum", b"appletini"])
 
     def test_search_autocomplete_field_name_match(self):
         """
