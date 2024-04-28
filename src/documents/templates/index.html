@@ -1,8 +1,9 @@
 <!doctype html>
-
 {% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_IS_RTL %}
 
-<html lang="en" data-bs-theme="auto">
+<html lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_IS_RTL %}dir="rtl"{% else %}dir="ltr"{% endif %} data-bs-theme="auto">
 <head>
 	<meta charset="utf-8">
 	<title>Paperless-ngx</title>
