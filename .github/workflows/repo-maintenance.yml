@@ -16,7 +16,7 @@ concurrency:
 jobs:
   stale:
     name: 'Stale'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/stale@v9
         with:
@@ -31,7 +31,7 @@ jobs:
             for your contributions. See our [contributing guidelines](https://github.com/paperless-ngx/paperless-ngx/blob/dev/CONTRIBUTING.md#automatic-repository-maintenance) for more details.
   lock-threads:
     name: 'Lock Old Threads'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: dessant/lock-threads@v5
         with:
@@ -56,7 +56,7 @@ jobs:
             See our [contributing guidelines](https://github.com/paperless-ngx/paperless-ngx/blob/dev/CONTRIBUTING.md#automatic-repository-maintenance) for more details.
   close-answered-discussions:
     name: 'Close Answered Discussions'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/github-script@v7
         with:
@@ -112,7 +112,7 @@ jobs:
             }
   close-outdated-discussions:
     name: 'Close Outdated Discussions'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/github-script@v7
         with:
@@ -203,7 +203,7 @@ jobs:
             }
   close-unsupported-feature-requests:
     name: 'Close Unsupported Feature Requests'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/github-script@v7
         with:
