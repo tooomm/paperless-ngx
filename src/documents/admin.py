@@ -20,12 +20,14 @@ if settings.AUDIT_LOG_ENABLED:
     from auditlog.models import LogEntry
 
 
+@admin.register(Correspondent)
 class CorrespondentAdmin(GuardedModelAdmin):
     list_display = ("name", "match", "matching_algorithm")
     list_filter = ("matching_algorithm",)
     list_editable = ("match", "matching_algorithm")
 
 
+@admin.register(Tag)
 class TagAdmin(GuardedModelAdmin):
     list_display = ("name", "color", "match", "matching_algorithm")
     list_filter = ("matching_algorithm",)
@@ -33,12 +35,14 @@ class TagAdmin(GuardedModelAdmin):
     search_fields = ("color", "name")
 
 
+@admin.register(DocumentType)
 class DocumentTypeAdmin(GuardedModelAdmin):
     list_display = ("name", "match", "matching_algorithm")
     list_filter = ("matching_algorithm",)
     list_editable = ("match", "matching_algorithm")
 
 
+@admin.register(Document)
 class DocumentAdmin(GuardedModelAdmin):
     search_fields = ("correspondent__name", "title", "content", "tags__name")
     readonly_fields = (
@@ -72,10 +76,11 @@ class DocumentAdmin(GuardedModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    @admin.display(
+        description="Created",
+    )
     def created_(self, obj):
         return obj.created.date().strftime("%Y-%m-%d")
-
-    created_.short_description = "Created"
 
     def delete_queryset(self, request, queryset):
         from documents import index
@@ -103,6 +108,7 @@ class RuleInline(admin.TabularInline):
     model = SavedViewFilterRule
 
 
+@admin.register(SavedView)
 class SavedViewAdmin(GuardedModelAdmin):
     list_display = ("name", "owner")
 
@@ -116,12 +122,14 @@ class StoragePathInline(admin.TabularInline):
     model = StoragePath
 
 
+@admin.register(StoragePath)
 class StoragePathAdmin(GuardedModelAdmin):
     list_display = ("name", "path", "match", "matching_algorithm")
     list_filter = ("path", "matching_algorithm")
     list_editable = ("path", "match", "matching_algorithm")
 
 
+@admin.register(PaperlessTask)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ("task_id", "task_file_name", "task_name", "date_done", "status")
     list_filter = ("status", "date_done", "task_name")
@@ -138,6 +146,7 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(Note)
 class NotesAdmin(GuardedModelAdmin):
     list_display = ("user", "created", "note", "document")
     list_filter = ("created", "user")
@@ -153,6 +162,7 @@ class NotesAdmin(GuardedModelAdmin):
         )
 
 
+@admin.register(ShareLink)
 class ShareLinksAdmin(GuardedModelAdmin):
     list_display = ("created", "expiration", "document")
     list_filter = ("created", "expiration", "owner")
@@ -163,6 +173,7 @@ class ShareLinksAdmin(GuardedModelAdmin):
         return super().get_queryset(request).select_related("document__correspondent")
 
 
+@admin.register(CustomField)
 class CustomFieldsAdmin(GuardedModelAdmin):
     fields = ("name", "created", "data_type")
     readonly_fields = ("created", "data_type")
@@ -170,6 +181,7 @@ class CustomFieldsAdmin(GuardedModelAdmin):
     list_filter = ("created", "data_type")
 
 
+@admin.register(CustomFieldInstance)
 class CustomFieldInstancesAdmin(GuardedModelAdmin):
     fields = ("field", "document", "created", "value")
     readonly_fields = ("field", "document", "created", "value")
@@ -184,18 +196,6 @@ class CustomFieldInstancesAdmin(GuardedModelAdmin):
             .select_related("field", "document__correspondent")
         )
 
-
-admin.site.register(Correspondent, CorrespondentAdmin)
-admin.site.register(Tag, TagAdmin)
-admin.site.register(DocumentType, DocumentTypeAdmin)
-admin.site.register(Document, DocumentAdmin)
-admin.site.register(SavedView, SavedViewAdmin)
-admin.site.register(StoragePath, StoragePathAdmin)
-admin.site.register(PaperlessTask, TaskAdmin)
-admin.site.register(Note, NotesAdmin)
-admin.site.register(ShareLink, ShareLinksAdmin)
-admin.site.register(CustomField, CustomFieldsAdmin)
-admin.site.register(CustomFieldInstance, CustomFieldInstancesAdmin)
 
 if settings.AUDIT_LOG_ENABLED:
 

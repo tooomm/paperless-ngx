@@ -30,6 +30,7 @@ class MailAccountAdminForm(forms.ModelForm):
         ]
 
 
+@admin.register(MailAccount)
 class MailAccountAdmin(GuardedModelAdmin):
     list_display = ("name", "imap_server", "username")
 
@@ -44,6 +45,7 @@ class MailAccountAdmin(GuardedModelAdmin):
     form = MailAccountAdminForm
 
 
+@admin.register(MailRule)
 class MailRuleAdmin(GuardedModelAdmin):
     radio_fields = {
         "attachment_type": admin.VERTICAL,
@@ -122,6 +124,7 @@ class MailRuleAdmin(GuardedModelAdmin):
     filter_horizontal = ("assign_tags",)
 
 
+@admin.register(ProcessedMail)
 class ProcessedMailAdmin(admin.ModelAdmin):
     class Meta:
         model = ProcessedMail
@@ -146,8 +149,3 @@ class ProcessedMailAdmin(admin.ModelAdmin):
     list_display_links = ["subject"]
 
     list_filter = ("status", "rule")
-
-
-admin.site.register(MailAccount, MailAccountAdmin)
-admin.site.register(MailRule, MailRuleAdmin)
-admin.site.register(ProcessedMail, ProcessedMailAdmin)

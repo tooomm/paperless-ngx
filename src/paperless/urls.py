@@ -1,9 +1,9 @@
 import os
 
 from django.conf import settings
-from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
+from django.urls import include
 from django.urls import path
 from django.urls import re_path
 from django.utils.translation import gettext_lazy as _
@@ -77,12 +77,12 @@ api_router.register(r"config", ApplicationConfigurationViewSet)
 
 
 urlpatterns = [
-    re_path(
-        r"^api/",
+    path(
+        "api/",
         include(
             [
-                re_path(
-                    "^auth/",
+                path(
+                    "auth/",
                     include(
                         ("rest_framework.urls", "rest_framework"),
                         namespace="rest_framework",
@@ -172,24 +172,24 @@ urlpatterns = [
     re_path(r"share/(?P<slug>\w+)/?$", SharedLinkView.as_view()),
     re_path(r"^favicon.ico$", FaviconView.as_view(), name="favicon"),
     re_path(r"admin/", admin.site.urls),
-    re_path(
-        r"^fetch/",
+    path(
+        "fetch/",
         include(
             [
-                re_path(
-                    r"^doc/(?P<pk>\d+)$",
+                path(
+                    "doc/<int:pk>",
                     RedirectView.as_view(
                         url=settings.BASE_URL + "api/documents/%(pk)s/download/",
                     ),
                 ),
-                re_path(
-                    r"^thumb/(?P<pk>\d+)$",
+                path(
+                    "thumb/<int:pk>",
                     RedirectView.as_view(
                         url=settings.BASE_URL + "api/documents/%(pk)s/thumb/",
                     ),
                 ),
-                re_path(
-                    r"^preview/(?P<pk>\d+)$",
+                path(
+                    "preview/<int:pk>",
                     RedirectView.as_view(
                         url=settings.BASE_URL + "api/documents/%(pk)s/preview/",
                     ),
@@ -197,8 +197,8 @@ urlpatterns = [
             ],
         ),
     ),
-    re_path(
-        r"^push$",
+    path(
+        "push",
         csrf_exempt(
             RedirectView.as_view(
                 url=settings.BASE_URL + "api/documents/post_document/",
