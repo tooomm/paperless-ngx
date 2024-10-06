@@ -27,7 +27,6 @@ from documents.models import CustomField
 from documents.models import CustomFieldInstance
 from documents.models import Document
 from documents.models import DocumentType
-from documents.models import FileInfo
 from documents.models import StoragePath
 from documents.models import Tag
 from documents.models import Workflow
@@ -834,8 +833,6 @@ class ConsumerPlugin(
     ) -> Document:
         # If someone gave us the original filename, use it instead of doc.
 
-        file_info = FileInfo.from_filename(self.filename)
-
         self.log.debug("Saving record to database")
 
         if self.metadata.created is not None:
@@ -843,9 +840,6 @@ class ConsumerPlugin(
             self.log.debug(
                 f"Creation date from post_documents parameter: {create_date}",
             )
-        elif file_info.created is not None:
-            create_date = file_info.created
-            self.log.debug(f"Creation date from FileInfo: {create_date}")
         elif date is not None:
             create_date = date
             self.log.debug(f"Creation date from parse_date: {create_date}")
@@ -858,7 +852,6 @@ class ConsumerPlugin(
 
         storage_type = Document.STORAGE_TYPE_UNENCRYPTED
 
-        title = file_info.title
         if self.metadata.title is not None:
             try:
                 title = self._parse_title_placeholders(self.metadata.title)
