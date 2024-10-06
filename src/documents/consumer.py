@@ -852,6 +852,7 @@ class ConsumerPlugin(
 
         storage_type = Document.STORAGE_TYPE_UNENCRYPTED
 
+        title = Path(self.filename).stem
         if self.metadata.title is not None:
             try:
                 title = self._parse_title_placeholders(self.metadata.title)
