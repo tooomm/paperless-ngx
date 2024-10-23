@@ -21,6 +21,7 @@ from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from drf_writable_nested.serializers import NestedUpdateMixin
+from duration_parser import parse_timedelta
 from guardian.core import ObjectPermissionChecker
 from guardian.shortcuts import get_users_with_perms
 from guardian.utils import get_group_obj_perms_model
@@ -1727,6 +1728,10 @@ class WorkflowTriggerSerializer(serializers.ModelSerializer):
         label="Trigger Type",
     )
 
+    schedule_delay = serializers.CharField(
+        required=False,
+    )
+
     class Meta:
         model = WorkflowTrigger
         fields = [
@@ -1742,7 +1747,20 @@ class WorkflowTriggerSerializer(serializers.ModelSerializer):
             "filter_has_tags",
             "filter_has_correspondent",
             "filter_has_document_type",
+            "schedule_delay",
+            "schedule_delay_field",
+            "schedule_delay_custom_field",
         ]
+
+    def validate_schedule_delay(self, value):
+        if value is not None:
+            try:
+                parse_timedelta(value)
+            except Exception as e:
+                raise serializers.ValidationError(
+                    f"Invalid schedule delay format: {e}",
+                )
+        return value
 
     def validate(self, attrs):
         # Empty strings treated as None to avoid unexpected behavior
@@ -1768,6 +1786,11 @@ class WorkflowTriggerSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "File name, path or mail rule filter are required",
             )
+
+        if attrs["type"] == WorkflowTrigger.WorkflowTriggerType.SCHEDULED and (
+            "schedule_delay" not in attrs or attrs["schedule_delay"] is None
+        ):
+            raise serializers.ValidationError("Schedule delay is required")
 
         return attrs
 
