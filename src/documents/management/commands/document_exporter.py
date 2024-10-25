@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import tqdm
+from allauth.mfa.models import Authenticator
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
@@ -264,6 +265,7 @@ class Command(CryptMixin, BaseCommand):
             "app_configs": ApplicationConfiguration.objects.all(),
             "notes": Note.objects.all(),
             "documents": Document.objects.order_by("id").all(),
+            "authenticators": Authenticator.objects.all(),
         }
 
         if settings.AUDIT_LOG_ENABLED:
