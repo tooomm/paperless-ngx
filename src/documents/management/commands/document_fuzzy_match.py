@@ -84,7 +84,9 @@ class Command(MultiProcessMixin, ProgressBarMixin, BaseCommand):
         if opt_ratio < RATIO_MIN or opt_ratio > RATIO_MAX:
             raise CommandError("The ratio must be between 0 and 100")
 
-        all_docs = Document.objects.all().order_by("id")
+        all_docs = Document.objects.filter(
+            storage_type=Document.STORAGE_TYPE_UNENCRYPTED,
+        ).order_by("id")
 
         # Build work packages for processing
         for first_doc in all_docs:

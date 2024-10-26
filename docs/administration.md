@@ -605,6 +605,8 @@ those which look close according to a given ratio.
 At this time, other metadata (such as correspondent or type) is not
 taken into account by the detection.
 
+The fuzzy match tool only checks unencrypted documents.
+
 ```
 document_fuzzy_match [--ratio] [--processes N]
 ```
